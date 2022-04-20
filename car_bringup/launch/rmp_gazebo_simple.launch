@@ -1,0 +1,37 @@
+<launch>
+    <arg name="robot_name" value="RMP_1"/>
+    <arg name="world_name" value="$(find car_bringup)/worlds/simple.world"/>
+    <arg name="paused" default="false"/>
+    <arg name="use_sim_time" default="true"/>
+    <arg name="gui" default="true"/>
+    <arg name="headless" default="false"/>
+    <arg name="debug" default="false"/>
+    <arg name="x_pos" default="0"/>
+    <arg name="y_pos" default="0"/>
+    <arg name="z_pos" default="0.2"/>
+    <arg name="yaw_pos" default="0"/>
+
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(arg world_name)" />
+        <arg name="debug" value="$(arg debug)" />
+        <arg name="gui" value="$(arg gui)" />
+        <arg name="paused" value="$(arg paused)"/>
+        <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+        <arg name="headless" value="$(arg headless)"/>
+    </include>
+
+    <group ns="$(arg robot_name)">
+    <include file="$(find fwd_description)/launch/rmp_fwd.launch" >
+        <arg name="robot_name" value="$(arg robot_name)"/>
+        <arg name="x_pos" value="$(arg x_pos)"/>
+        <arg name="y_pos" value="$(arg y_pos)"/>
+        <arg name="z_pos" value="$(arg z_pos)"/>
+        <arg name="yaw_pos" value="$(arg yaw_pos)"/>
+    </include>
+    </group>
+    <node name="rviz" pkg="rviz" type="rviz"  args="-d $(find car_bringup)/rviz/RMP_1_rrt.rviz">
+        <remap from="/move_base_simple/goal" to="/$(arg robot_name)/move_base_simple/goal"/>
+        <remap from="/initialpose" to="/$(arg robot_name)/initialpose"/>
+        <!-- <remap from="/clicked_point" to="/$(arg robot_name)/clicked_point"/> -->
+    </node>
+</launch>

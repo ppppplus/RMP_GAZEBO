@@ -1,0 +1,7 @@
+<launch>
+  <arg name="robot_name" default="RMP_1"/>
+  <group ns="$(arg robot_name)">
+    <!-- turtlebot_teleop_key already has its own built in velocity smoother -->
+    <node pkg="fwd_control" type="keyboard_teleop.py" name="keyboard_teleop"  output="screen"/>
+  </group>
+</launch>
